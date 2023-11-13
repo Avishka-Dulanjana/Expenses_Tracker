@@ -70,6 +70,8 @@ class _ExpensesState extends State<Expenses> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+
     Widget mainContent = const Center(
       child: Text("No expenses found. Start adding some..!"),
     );
@@ -89,12 +91,26 @@ class _ExpensesState extends State<Expenses> {
           ),
         ],
       ),
-      body: Column(children: [
-        Chart(expenses: _registeredExpenses),
-        Expanded(
-          child: mainContent,
-        ),
-      ]),
+      body: width <
+              600 // Ternary expression for IF width < 600 display as a Column - Portrait mode ( Landscape )
+          ? Column(children: [
+              Chart(expenses: _registeredExpenses),
+              Expanded(
+                child: mainContent,
+              ),
+            ])
+          : Row(
+              // ELSE display as a Row
+              children: [
+                Expanded(
+                  // This expanded using because default chart using width: double.infinity for their Container. So after portrait width also take infinity display.
+                  child: Chart(expenses: _registeredExpenses),
+                ),
+                Expanded(
+                  child: mainContent,
+                ),
+              ],
+            ),
     );
   }
 }
